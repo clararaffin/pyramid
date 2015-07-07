@@ -1,39 +1,30 @@
-v = []
-
-class Cell:
-	def __init__(self,pos):
-		self.pos = pos
-		v[self.pos] = int(raw_input("Ingresa valor de celda " + str(num) + ": "))
-		self.hijo_der = self.set_hijo_der()
-		self.hijo_izq = self.set_hijo_izq()
-	#	self.padre_izq = self.set_Padre_izq()
-	#	self.padre_der = self.set_Padre_der()
-
-	def set_hijo_izq(self):
-		if (self.pos >= 16 and self.pos <= 21):
-			return -1
+class celda:
+	def __init__(self,der,izq):
+		self.son_der=der	#hijo derecho
+		self.son_izq=izq	#hijo izquierdo
+		self.var=0		#padre
+	def hacer(self):
+		bandera=0
+		if(self.var==0):
+			if( (self.son_der.var!=0) and (self.son_izq.var!=0) ):		#si los hijos tienen números,
+				self.var=self.son_der.var+self.son_izq.val		#guardar en el padre la suma de ellos.
+				bandera=1
 		else:
-			self.v = self.pos + self.subir()
-			return self.v
-
-
-	def set_hijo_der(self):
-		if (self.pos >= 16 and self.pos <= 21):
-			return -1
-		else:
-			self.v = self.pos + self.subir() + 1
-			return self.v
+			if( (self.son_der.var==0) and (self.son_izq.var!=0) ):		#si el hijo derecho está vacío,
+				self.son_der.var=self.var-self.son_izq.var		#se guarda en él la resta entre el padre
+				bandera=1						#y el hijo izquierdo.
 			
-	def subir(self):
-		if (self.pos == 1):
-			return 1
-		elif(self.pos == 2 or self.pos == 3):
-			return 2
-		elif (self.pos >= 4 and self.pos <= 6):
-			return 3
-		elif(self.pos >= 7 and self.pos <= 10):
-			return 4
-		elif(self.pos >= 11 and self.pos <= 15):
-			return 5
-		else:
-			return 6
+			if( (self.son_der.var!=0) and (self.son_izq.val==0) ):		#si el hijo izquierdo está vacío,
+				self.son_izq.var=self.var-self.son_der.var		#se guarda en él la resta entre el padre
+				bandera=1						#y el hijo derecho.
+		
+		bandera=bandera or self.son_der.hacer() or self.son_izq.hacer()		
+		return bandera
+	def listo(self):
+		bandera=1
+		if(self.var==0):
+			bandera=0
+		bandera=bandera or self.son_der.listo() or self.son_izq.listo()		
+		return bandera
+
+#falta el tema de la base de la pirámide y mostrar todo
